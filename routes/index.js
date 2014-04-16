@@ -9,7 +9,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/matches/:matchID', function(req,res) {
-  var key = '9FBDC7E293CD7E6F00D1F6E578CB3516';
+  var key = '';
   var options = {
     host: 'api.steampowered.com',
     port: 80,
@@ -29,8 +29,10 @@ router.get('/matches/:matchID', function(req,res) {
       //console.log('BODY: ' + chunk);
       str += chunk;
     });
+    
     _res.on('end', function() {
-      res.render('index', {"title":str});
+      //res.render('index', {"title":str});
+      res.json(JSON.parse(str));
     });
   };
     
@@ -39,7 +41,6 @@ router.get('/matches/:matchID', function(req,res) {
   exReq.on('error', function(e) {
     console.log('problem with request: ' + e.message);
   });  
-  
   exReq.end();
   //res.render('index', {"title": req.params.matchID});
 });
