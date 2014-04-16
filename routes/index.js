@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var http = require('http');
 var async = require('async');
+var chest = require('./chest');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -9,7 +10,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/matches/:matchID', function(req,res) {
-  var key = '';
+  var key = chest.key;
   var options = {
     host: 'api.steampowered.com',
     port: 80,
