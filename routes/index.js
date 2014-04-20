@@ -4,45 +4,48 @@ var http = require('http');
 var async = require('async');
 var chest = require('./chest');
 
+// Custom Controllers 
+var dota = require('../controllers/match-controller-2.js');
 /* GET home page. */
 router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/players/:userID', function(req,res) {
+  
+});
+
 router.get('/matches/:matchID', function(req,res) {
   var key = chest.key;
-  var options = {
-    host: 'api.steampowered.com',
-    port: 80,
-    path: '/IDOTA2Match_570/GetMatchDetails/V001/?match_id=' + req.params.matchID + '&key=' + key,
-    method: 'GET'
-  };
- 
+  var dotaGet = dota(req.params.matchID,key);
+  var options = dotaGet.getMatchDetails();
+
   var renderThis = function() {
     res.render('index',{"title": str});
   };
-  var callbackHell = function(_res) {
-    //console.log('STATUS: ' + _res.statusCode);
-    //console.log('HEADERS: ' + JSON.stringify(_res.headers));
+
+  
+  // Request Starts here  
+  var exReq = http.request(options, callbackHell);  
+  exReq.on('error', function(e) {
+    console.log('problem with request: ' + e.message);
+  });  
+  exReq.end();
+
+  function callbackHell(_res) {
+    console.log('STATUS: ' + _res.statusCode);
+    console.log('HEADERS: ' + JSON.stringify(_res.headers));
     _res.setEncoding('utf8');
     var str = '';
     _res.on('data', function (chunk) {
-      //console.log('BODY: ' + chunk);
       str += chunk;
     });
-    
     _res.on('end', function() {
       //res.render('index', {"title":str});
       res.json(JSON.parse(str));
     });
   };
-    
-  var exReq = http.request(options, callbackHell);
-
-  exReq.on('error', function(e) {
-    console.log('problem with request: ' + e.message);
-  });  
-  exReq.end();
+  
   //res.render('index', {"title": req.params.matchID});
 });
 
