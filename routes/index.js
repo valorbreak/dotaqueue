@@ -1,3 +1,4 @@
+"use strict";
 var express = require('express');
 var router = express.Router();
 var http = require('http');
@@ -20,18 +21,6 @@ router.get('/matches/:matchID', function(req,res) {
   var dotaGet = dota(req.params.matchID,key);
   var options = dotaGet.getMatchDetails();
 
-  var renderThis = function() {
-    res.render('index',{"title": str});
-  };
-
-  
-  // Request Starts here  
-  var exReq = http.request(options, callbackHell);  
-  exReq.on('error', function(e) {
-    console.log('problem with request: ' + e.message);
-  });  
-  exReq.end();
-
   function callbackHell(_res) {
     console.log('STATUS: ' + _res.statusCode);
     console.log('HEADERS: ' + JSON.stringify(_res.headers));
@@ -44,9 +33,15 @@ router.get('/matches/:matchID', function(req,res) {
       //res.render('index', {"title":str});
       res.json(JSON.parse(str));
     });
-  };
+  }
   
-  //res.render('index', {"title": req.params.matchID});
+  // Request Starts here  
+  var exReq = http.request(options, callbackHell);
+  exReq.on('error', function(e) {
+    console.log('problem with request: ' + e.message);
+  });
+  exReq.end();
+
 });
 
 module.exports = router;

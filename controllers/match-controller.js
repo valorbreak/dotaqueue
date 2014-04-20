@@ -1,3 +1,4 @@
+"use strict";
 
 var dotaMatchController = {
   getMatchDetails : function (matchID,key){
@@ -18,7 +19,6 @@ var dotaMatchController = {
     };
     return link;
   }
-}
-
+};
 
 module.exports = dotaMatchController;

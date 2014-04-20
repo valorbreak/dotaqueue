@@ -1,5 +1,3 @@
-/*global require, module, __dirname */
-/*jslint node: true */
 "use strict";
 
 var express = require('express');
