@@ -1,7 +1,7 @@
 
 var dotaMatchController = {
   getMatchDetails : function (matchID,key){
-  	var link = {
+    var link = {
       host: 'api.steampowered.com',
       port: 80,
       path: '/IDOTA2Match_570/GetMatchDetails/V001/?match_id=' + matchID + '&key=' + key,
@@ -10,7 +10,7 @@ var dotaMatchController = {
     return link;
   },
   getMatchHistory : function (matchID,key){
-  	var link = {
+    var link = {
       host: 'api.steampowered.com',
       port: 80,
       path: '/IDOTA2Match_570/GetMatchDetails/V001/?match_id=' + matchID + '&key=' + key,
