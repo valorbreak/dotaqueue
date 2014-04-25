@@ -9,6 +9,8 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var testModel = require('./models/test');
+var mongoose = require('mongoose');
 
 var app = express();
 
@@ -31,6 +33,25 @@ app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
+});
+
+var dbURI = 'mongodb://localhost/myapp';
+mongoose.connect(dbURI);
+
+// CONNECTION EVENTS
+// When successfully connected
+mongoose.connection.on('connected', function () {
+  console.log('Mongoose default connection open to ' + dbURI);
+});
+
+// If the connection throws an error
+mongoose.connection.on('error',function (err) {
+  console.log('Mongoose default connection error: ' + err);
+});
+
+// When the connection is disconnected
+mongoose.connection.on('disconnected', function () {
+  console.log('Mongoose default connection disconnected');
 });
 
 /// error handlers
@@ -56,6 +77,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
