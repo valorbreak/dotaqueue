@@ -3,14 +3,7 @@ var express = require('express');
 var router = express.Router();
 var http = require('http');
 var async = require('async');
-var chest = require('./chest');
 var mongoose = require('mongoose');
-
-// Custom Controllers 
-var dota = require('../controllers/match-controller-2.js');
-
-// Custom Models
-var testTitle = require('../models/test');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -47,38 +40,6 @@ router.get('/update', function(req,res){
   
   var dbjson = JSON.stringify(mongoose, censor(mongoose));
   res.json(dbjson);
-});
-router.get('/matches/:matchID', function(req,res) {
-  var key = chest.key;
-  var dotaGet = dota(req.params.matchID,key);
-  var options = dotaGet.getMatchDetails();
-
-  function callbackHell(_res) {
-    console.log('STATUS: ' + _res.statusCode);
-    console.log('HEADERS: ' + JSON.stringify(_res.headers));
-    _res.setEncoding('utf8');
-    var str = '';
-    _res.on('data', function (chunk) {
-      str += chunk;
-    });
-    _res.on('end', function() {
-      //res.render('index', {"title":str});
-      
-      var matchData = JSON.parse(str);
-      var testModel = new testTitle({title: matchData.results});
-      testModel.save();
-      res.json(JSON.parse(str));
-
-    });
-  }
-  
-  // Request Starts here  
-  var exReq = http.request(options, callbackHell);
-  exReq.on('error', function(e) {
-    console.log('problem with request: ' + e.message);
-  });
-  exReq.end();
-
 });
 
 module.exports = router;

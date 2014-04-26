@@ -1,4 +1,3 @@
-
 function dotaMatchController(matchID,key){
   function getMatchDetails(){
     var link = {
